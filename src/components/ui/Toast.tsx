@@ -1,34 +1,12 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
+import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, Info } from 'lucide-react';
-
-export interface ToastOptions {
-  message: string;
-  /** Optional action button, e.g. Undo. */
-  action?: { label: string; onClick: () => void };
-  variant?: 'success' | 'info';
-  durationMs?: number;
-}
+import { ToastContext, type ToastOptions } from './toastContext';
 
 interface ToastItem extends Required<Pick<ToastOptions, 'message' | 'variant'>> {
   id: number;
   action?: ToastOptions['action'];
-}
-
-const ToastContext = createContext<((options: ToastOptions) => void) | null>(null);
-
-export function useToast() {
-  const showToast = useContext(ToastContext);
-  if (!showToast) throw new Error('useToast must be used within a ToastProvider');
-  return showToast;
 }
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -39,7 +17,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const id = nextId.current++;
     setToasts((current) => [
       ...current.slice(-2), // keep at most 3 visible
-      { id, message: options.message, variant: options.variant ?? 'success', action: options.action },
+      {
+        id,
+        message: options.message,
+        variant: options.variant ?? 'success',
+        action: options.action,
+      },
     ]);
     window.setTimeout(() => {
       setToasts((current) => current.filter((t) => t.id !== id));

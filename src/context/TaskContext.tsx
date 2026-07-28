@@ -1,15 +1,9 @@
-import { createContext, useEffect, useReducer, type Dispatch, type ReactNode } from 'react';
+import { useEffect, useReducer, type ReactNode } from 'react';
 import type { TaskState } from '@/types/task';
-import { taskReducer, type TaskAction } from './taskReducer';
+import { taskReducer } from './taskReducer';
+import { TaskDispatchContext, TaskStateContext } from './taskContexts';
 import { loadTasks, loadViewMode, saveTasks, saveViewMode } from '@/utils/storage';
 import { createSeedTasks } from '@/utils/seedData';
-
-/**
- * State and dispatch are split into two contexts so components that only
- * dispatch (forms, buttons) never re-render on state changes.
- */
-export const TaskStateContext = createContext<TaskState | null>(null);
-export const TaskDispatchContext = createContext<Dispatch<TaskAction> | null>(null);
 
 function init(): TaskState {
   return {
