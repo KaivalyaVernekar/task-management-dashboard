@@ -1,9 +1,10 @@
 import { memo } from 'react';
 import { CalendarDays, Pencil, Trash2 } from 'lucide-react';
 import type { Task, TaskStatus } from '@/types/task';
-import { STATUS_LABELS, TASK_STATUSES } from '@/types/task';
+import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { StatusBadge } from '@/components/ui/Badge';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { formatDueLabel, formatFullDate, isOverdue } from '@/utils/date';
 import { useTaskDispatch } from '@/hooks/useTasks';
 import { cn } from '@/utils/cn';
@@ -33,20 +34,24 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       <div className="flex items-start justify-between gap-2">
         <StatusBadge status={task.status} />
         <div className="flex items-center gap-0.5 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within:opacity-100 sm:group-hover:opacity-100">
-          <button
-            className="icon-btn"
-            onClick={() => onEdit(task)}
-            aria-label={`Edit ${task.title}`}
-          >
-            <Pencil className="h-4 w-4" aria-hidden />
-          </button>
-          <button
-            className="icon-btn hover:text-danger"
-            onClick={() => onDelete(task)}
-            aria-label={`Delete ${task.title}`}
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
-          </button>
+          <Tooltip content="Edit task">
+            <button
+              className="icon-btn"
+              onClick={() => onEdit(task)}
+              aria-label={`Edit ${task.title}`}
+            >
+              <Pencil className="h-4 w-4" aria-hidden />
+            </button>
+          </Tooltip>
+          <Tooltip content="Delete task">
+            <button
+              className="icon-btn hover:text-danger"
+              onClick={() => onDelete(task)}
+              aria-label={`Delete ${task.title}`}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
@@ -66,18 +71,23 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-content-muted/10 pt-3">
-        <span
-          title={formatFullDate(task.dueDate)}
-          className={cn(
-            'inline-flex items-center gap-1.5 text-xs font-medium',
-            overdue ? 'text-danger' : 'text-content-muted'
-          )}
-        >
-          <CalendarDays className="h-3.5 w-3.5" aria-hidden />
-          {formatDueLabel(task.dueDate)}
-        </span>
+        <Tooltip content={formatFullDate(task.dueDate)}>
+          <span
+            tabIndex={0}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50',
+              overdue ? 'text-danger' : 'text-content-muted'
+            )}
+          >
+            <CalendarDays className="h-3.5 w-3.5" aria-hidden />
+            {formatDueLabel(task.dueDate)}
+            <span className="sr-only">, due {formatFullDate(task.dueDate)}</span>
+          </span>
+        </Tooltip>
         <div className="flex items-center gap-3">
-          <PriorityFlag priority={task.priority} showLabel={false} />
+          <Tooltip content={`${PRIORITY_LABELS[task.priority]} priority`}>
+            <PriorityFlag priority={task.priority} showLabel={false} />
+          </Tooltip>
           <label className="sr-only" htmlFor={`status-${task.id}`}>
             Change status of {task.title}
           </label>
