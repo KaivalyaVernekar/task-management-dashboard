@@ -34,7 +34,9 @@ export default function TasksPage() {
   const [deleting, setDeleting] = useState<Task | null>(null);
 
   const pageTitle =
-    filter === 'all' ? 'All Tasks' : `${STATUS_LABELS[filter as Exclude<StatusFilter, 'all'>]} Tasks`;
+    filter === 'all'
+      ? 'All Tasks'
+      : `${STATUS_LABELS[filter as Exclude<StatusFilter, 'all'>]} Tasks`;
 
   useEffect(() => {
     if (isValid) document.title = `${pageTitle} — TaskFlow`;
@@ -85,9 +87,7 @@ export default function TasksPage() {
           onEdit={setEditing}
           onDelete={setDeleting}
           onAdd={() => setAdding(true)}
-          emptyTitle={
-            counts.all === 0 ? 'No tasks yet' : `No ${pageTitle.toLowerCase()} match`
-          }
+          emptyTitle={counts.all === 0 ? 'No tasks yet' : `No ${pageTitle.toLowerCase()} match`}
           emptyDescription={
             counts.all === 0
               ? 'Add your first task to get started.'

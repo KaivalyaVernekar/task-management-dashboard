@@ -40,7 +40,9 @@ export function FilterBar({ counts, showFilters = true }: FilterBarProps) {
                 <span
                   className={cn(
                     'relative z-10 flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors',
-                    isActive ? 'text-white dark:text-slate-950' : 'text-content-muted hover:text-content'
+                    isActive
+                      ? 'text-white dark:text-slate-950'
+                      : 'text-content-muted hover:text-content'
                   )}
                 >
                   {isActive && (

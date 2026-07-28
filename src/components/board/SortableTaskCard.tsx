@@ -28,7 +28,8 @@ export function SortableTaskCard({ task, onEdit, onDelete }: SortableTaskCardPro
       className={cn(
         'touch-manipulation',
         // Origin slot while dragging: dashed ghost placeholder
-        isDragging && 'opacity-40 [&>article]:border-2 [&>article]:border-dashed [&>article]:border-content-muted/30 [&>article]:shadow-none'
+        isDragging &&
+          'opacity-40 [&>article]:border-2 [&>article]:border-dashed [&>article]:border-content-muted/30 [&>article]:shadow-none'
       )}
       {...attributes}
       {...listeners}

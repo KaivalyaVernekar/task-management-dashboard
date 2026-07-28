@@ -33,7 +33,11 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       <div className="flex items-start justify-between gap-2">
         <StatusBadge status={task.status} />
         <div className="flex items-center gap-0.5 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within:opacity-100 sm:group-hover:opacity-100">
-          <button className="icon-btn" onClick={() => onEdit(task)} aria-label={`Edit ${task.title}`}>
+          <button
+            className="icon-btn"
+            onClick={() => onEdit(task)}
+            aria-label={`Edit ${task.title}`}
+          >
             <Pencil className="h-4 w-4" aria-hidden />
           </button>
           <button
@@ -47,7 +51,13 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       </div>
 
       <div className="flex-1">
-        <h3 className={cn('font-semibold leading-snug', task.status === 'completed' && 'text-content-muted line-through decoration-content-muted/50')}>
+        <h3
+          className={cn(
+            'font-semibold leading-snug',
+            task.status === 'completed' &&
+              'text-content-muted line-through decoration-content-muted/50'
+          )}
+        >
           {task.title}
         </h3>
         {task.description && (

@@ -112,9 +112,7 @@ export function BoardView({ onEdit, onDelete, onAdd }: BoardViewProps) {
           },
           onDragEnd: ({ over }) => {
             const column = overColumn(over?.id);
-            return column
-              ? `Task dropped in the ${STATUS_LABELS[column]} column`
-              : 'Task dropped';
+            return column ? `Task dropped in the ${STATUS_LABELS[column]} column` : 'Task dropped';
           },
           onDragCancel: () => 'Dragging cancelled',
         },

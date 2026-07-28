@@ -9,9 +9,24 @@ interface SummaryBarProps {
 
 const cards = [
   { key: 'all', label: 'Total tasks', icon: ListTodo, accent: 'text-brand bg-brand/10' },
-  { key: 'pending', label: 'Pending', icon: Circle, accent: 'text-status-pending bg-status-pending/10' },
-  { key: 'in-progress', label: 'In Progress', icon: CircleDotDashed, accent: 'text-status-progress bg-status-progress/10' },
-  { key: 'completed', label: 'Completed', icon: CircleCheck, accent: 'text-status-completed bg-status-completed/10' },
+  {
+    key: 'pending',
+    label: 'Pending',
+    icon: Circle,
+    accent: 'text-status-pending bg-status-pending/10',
+  },
+  {
+    key: 'in-progress',
+    label: 'In Progress',
+    icon: CircleDotDashed,
+    accent: 'text-status-progress bg-status-progress/10',
+  },
+  {
+    key: 'completed',
+    label: 'Completed',
+    icon: CircleCheck,
+    accent: 'text-status-completed bg-status-completed/10',
+  },
 ] as const;
 
 function AnimatedNumber({ value }: { value: number }) {

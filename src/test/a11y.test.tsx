@@ -25,9 +25,9 @@ describe('accessibility (axe-core)', () => {
     );
     await findByRole('heading', { name: /all tasks/i });
     const violations = await runAxe(container);
-    expect(
-      violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)
-    ).toEqual([]);
+    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual(
+      []
+    );
   });
 
   it('trash page has no axe violations', async () => {
@@ -38,8 +38,8 @@ describe('accessibility (axe-core)', () => {
     );
     await findByRole('heading', { level: 1, name: /trash/i });
     const violations = await runAxe(container);
-    expect(
-      violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)
-    ).toEqual([]);
+    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual(
+      []
+    );
   });
 });

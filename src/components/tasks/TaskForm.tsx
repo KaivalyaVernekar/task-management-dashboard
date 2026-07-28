@@ -3,12 +3,7 @@ import { Flag } from 'lucide-react';
 import type { Task, TaskPriority, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { Button } from '@/components/ui/Button';
-import {
-  DESCRIPTION_MAX,
-  hasErrors,
-  validateTask,
-  type TaskFormErrors,
-} from '@/utils/validation';
+import { DESCRIPTION_MAX, hasErrors, validateTask, type TaskFormErrors } from '@/utils/validation';
 import { todayISO } from '@/utils/date';
 import { cn } from '@/utils/cn';
 
@@ -69,7 +64,10 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <div>
         <label htmlFor="task-title" className="label">
-          Title <span aria-hidden className="text-danger">*</span>
+          Title{' '}
+          <span aria-hidden className="text-danger">
+            *
+          </span>
         </label>
         <input
           ref={titleRef}
@@ -130,7 +128,10 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="task-due-date" className="label">
-            Due date <span aria-hidden className="text-danger">*</span>
+            Due date{' '}
+            <span aria-hidden className="text-danger">
+              *
+            </span>
           </label>
           <input
             ref={dueDateRef}
@@ -188,7 +189,11 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
                 priorityStyles[value]
               )}
             >
-              <Flag className="h-3.5 w-3.5" fill={priority === value ? 'currentColor' : 'none'} aria-hidden />
+              <Flag
+                className="h-3.5 w-3.5"
+                fill={priority === value ? 'currentColor' : 'none'}
+                aria-hidden
+              />
               {PRIORITY_LABELS[value]}
             </button>
           ))}

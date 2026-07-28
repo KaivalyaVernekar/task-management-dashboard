@@ -33,8 +33,7 @@ export function useFilteredTasks(filter: StatusFilter) {
     if (filter !== 'all') visible = visible.filter((t) => t.status === filter);
     if (query) {
       visible = visible.filter(
-        (t) =>
-          t.title.toLowerCase().includes(query) || t.description.toLowerCase().includes(query)
+        (t) => t.title.toLowerCase().includes(query) || t.description.toLowerCase().includes(query)
       );
     }
 

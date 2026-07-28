@@ -30,9 +30,7 @@ describe('task flow (integration)', () => {
     await user.click(within(dialog).getByRole('radio', { name: /high/i }));
     await user.click(within(dialog).getByRole('button', { name: /^add task$/i }));
 
-    expect(
-      await screen.findByRole('heading', { name: /ship the take-home/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /ship the take-home/i })).toBeInTheDocument();
 
     // --- Edit
     await user.click(screen.getByRole('button', { name: /edit ship the take-home/i }));
@@ -59,9 +57,7 @@ describe('task flow (integration)', () => {
     await user.click(screen.getByRole('link', { name: /trash/i }));
     expect(await screen.findByText(/ship it today/i)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /restore/i }));
-    await waitFor(() =>
-      expect(screen.queryByText(/ship it today/i)).not.toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.queryByText(/ship it today/i)).not.toBeInTheDocument());
   });
 
   it('filters by status through the URL pills', async () => {
@@ -80,6 +76,8 @@ describe('task flow (integration)', () => {
 
     // Only completed seed tasks are shown
     expect(await screen.findByRole('heading', { name: /ship dark mode/i })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: /fix login redirect bug/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: /fix login redirect bug/i })
+    ).not.toBeInTheDocument();
   });
 });

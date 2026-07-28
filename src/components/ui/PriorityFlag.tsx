@@ -27,7 +27,11 @@ export function PriorityFlag({
       )}
     >
       <Flag className="h-3.5 w-3.5" fill="currentColor" aria-hidden />
-      {showLabel ? PRIORITY_LABELS[priority] : <span className="sr-only">{PRIORITY_LABELS[priority]} priority</span>}
+      {showLabel ? (
+        PRIORITY_LABELS[priority]
+      ) : (
+        <span className="sr-only">{PRIORITY_LABELS[priority]} priority</span>
+      )}
     </span>
   );
 }
