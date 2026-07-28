@@ -2,7 +2,9 @@
 
 A task management dashboard with two views over one state: a filterable, sortable **list** and a Jira-style **kanban board** with accessible drag & drop. Built with React 18, TypeScript (strict), Tailwind CSS, and the Context API.
 
-**Live demo:** _add your Vercel URL here_
+**Live demo:** [task-management-dashboard-puce.vercel.app](https://task-management-dashboard-puce.vercel.app/)
+
+[![TaskFlow dashboard — dark mode](docs/dashboard-dark.png)](https://task-management-dashboard-puce.vercel.app/)
 
 ## Features
 
