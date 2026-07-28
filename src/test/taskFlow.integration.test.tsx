@@ -74,10 +74,13 @@ describe('task flow (integration)', () => {
     await user.click(within(filterNav).getByRole('link', { name: /^completed/i }));
     expect(await screen.findByRole('heading', { name: /completed tasks/i })).toBeInTheDocument();
 
-    // Only completed seed tasks are shown
+    // Only completed seed tasks are shown; non-matching cards animate out
+    // (filter changes no longer remount the page — cards exit via AnimatePresence)
     expect(await screen.findByRole('heading', { name: /ship dark mode/i })).toBeInTheDocument();
-    expect(
-      screen.queryByRole('heading', { name: /fix login redirect bug/i })
-    ).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('heading', { name: /fix login redirect bug/i })
+      ).not.toBeInTheDocument()
+    );
   });
 });

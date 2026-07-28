@@ -2,8 +2,14 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from './Navbar';
 
+/** Status filter routes all render TasksPage — one page identity. */
+const TASK_ROUTES = ['/', '/pending', '/in-progress', '/completed'];
+
 export function Layout() {
   const { pathname } = useLocation();
+  // Animation boundary = conceptual page, not URL string: switching filter
+  // pills must not remount TasksPage (would replay all entrance animations).
+  const pageKey = TASK_ROUTES.includes(pathname) ? 'tasks' : pathname;
 
   return (
     <div className="min-h-screen">
@@ -19,7 +25,7 @@ export function Layout() {
             to the new route inside the exiting clone (page duplication bug), so the
             new page simply fades/slides in on route change. */}
         <motion.div
-          key={pathname}
+          key={pageKey}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
