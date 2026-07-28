@@ -44,6 +44,14 @@
   ::selection {
     @apply bg-brand/20;
   }
+  /* Selects are click-to-open controls — signal it, like buttons do.
+     (Tailwind preflight already gives buttons cursor: pointer.) */
+  select {
+    @apply cursor-pointer;
+  }
+  select option {
+    cursor: pointer; /* honored by browsers that style native options */
+  }
 }
 
 /* ---------------------------------------------------------------------------
