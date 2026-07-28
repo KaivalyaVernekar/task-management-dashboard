@@ -1,4 +1,4 @@
-import type { Task } from '@/types/task';
+import type { Task, TaskStatus } from '@/types/task';
 import { Modal } from '@/components/ui/Modal';
 import { TaskForm, type TaskFormSubmitValues } from './TaskForm';
 import { useTaskDispatch, useTaskState } from '@/hooks/useTasks';
@@ -9,10 +9,12 @@ interface TaskModalProps {
   onClose: () => void;
   /** Editing when set, creating otherwise. */
   task?: Task;
+  /** Preselected status for create mode (board column quick-add). */
+  initialStatus?: TaskStatus;
 }
 
 /** Wires TaskForm to the store: create or update, with toast feedback. */
-export function TaskModal({ open, onClose, task }: TaskModalProps) {
+export function TaskModal({ open, onClose, task, initialStatus }: TaskModalProps) {
   const dispatch = useTaskDispatch();
   const { tasks } = useTaskState();
   const showToast = useToast();
@@ -41,7 +43,13 @@ export function TaskModal({ open, onClose, task }: TaskModalProps) {
 
   return (
     <Modal open={open} onClose={onClose} title={task ? 'Edit task' : 'Add task'}>
-      <TaskForm key={task?.id ?? 'new'} task={task} onSubmit={handleSubmit} onCancel={onClose} />
+      <TaskForm
+        key={task?.id ?? `new-${initialStatus ?? 'pending'}`}
+        task={task}
+        initialStatus={initialStatus}
+        onSubmit={handleSubmit}
+        onCancel={onClose}
+      />
     </Modal>
   );
 }

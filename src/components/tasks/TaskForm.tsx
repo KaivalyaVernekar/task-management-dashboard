@@ -23,6 +23,8 @@ export interface TaskFormSubmitValues {
 interface TaskFormProps {
   /** When present the form is in edit mode, otherwise it creates. */
   task?: Task;
+  /** Preselected status for create mode (board column quick-add). */
+  initialStatus?: TaskStatus;
   onSubmit: (values: TaskFormSubmitValues) => void;
   onCancel: () => void;
 }
@@ -37,10 +39,10 @@ const priorityStyles: Record<TaskPriority, string> = {
 };
 
 /** One reusable form for both add and edit — validation on submit, errors clear on change. */
-export function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
+export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormProps) {
   const [title, setTitle] = useState(task?.title ?? '');
   const [description, setDescription] = useState(task?.description ?? '');
-  const [status, setStatus] = useState<TaskStatus>(task?.status ?? 'pending');
+  const [status, setStatus] = useState<TaskStatus>(task?.status ?? initialStatus ?? 'pending');
   const [priority, setPriority] = useState<TaskPriority>(task?.priority ?? 'medium');
   const [dueDate, setDueDate] = useState(task?.dueDate ?? todayISO());
   const [errors, setErrors] = useState<TaskFormErrors>({});
