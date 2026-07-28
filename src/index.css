@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Design tokens — single source of truth for both themes.
+   RGB triplets so Tailwind opacity modifiers keep working (bg-surface/80).
+--------------------------------------------------------------------------- */
+:root {
+  --color-surface: 248 250 252; /* slate-50 */
+  --color-surface-raised: 255 255 255; /* white cards */
+  --color-surface-sunken: 241 245 249; /* slate-100 wells */
+  --color-content: 15 23 42; /* slate-900 */
+  --color-content-muted: 100 116 139; /* slate-500 */
+  --color-brand: 99 102 241; /* indigo-500 */
+  --color-brand-hover: 79 70 229; /* indigo-600 */
+  --color-pending: 217 119 6; /* amber-600 — AA on soft bg */
+  --color-progress: 37 99 235; /* blue-600 */
+  --color-completed: 5 150 105; /* emerald-600 */
+  --color-danger: 220 38 38; /* red-600 */
+}
+
+.dark {
+  --color-surface: 2 6 23; /* slate-950 */
+  --color-surface-raised: 15 23 42; /* slate-900 cards */
+  --color-surface-sunken: 30 41 59; /* slate-800 wells */
+  --color-content: 241 245 249; /* slate-100 */
+  --color-content-muted: 148 163 184; /* slate-400 */
+  --color-brand: 129 140 248; /* indigo-400 */
+  --color-brand-hover: 165 180 252; /* indigo-300 */
+  --color-pending: 251 191 36; /* amber-400 */
+  --color-progress: 96 165 250; /* blue-400 */
+  --color-completed: 52 211 153; /* emerald-400 */
+  --color-danger: 248 113 113; /* red-400 */
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-surface font-sans text-content;
+  }
+  ::selection {
+    @apply bg-brand/20;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Component classes — reserved for true design-system primitives that repeat
+   3+ times. Layout and one-off styling stay as inline utilities; component
+   variants are resolved in TSX via cn().
+--------------------------------------------------------------------------- */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+      transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60
+      focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:pointer-events-none
+      disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-hover dark:text-slate-950;
+  }
+  .btn-secondary {
+    @apply btn border border-content-muted/25 bg-surface-raised text-content hover:bg-surface-sunken;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-danger/90 dark:text-slate-950;
+  }
+  .btn-ghost {
+    @apply btn text-content-muted hover:bg-content/5 hover:text-content;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-lg text-content-muted
+      transition-colors hover:bg-content/5 hover:text-content focus-visible:outline-none
+      focus-visible:ring-2 focus-visible:ring-brand/60;
+  }
+
+  .card {
+    @apply rounded-card bg-surface-raised shadow-card;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset;
+  }
+  .badge-pending {
+    @apply badge bg-status-pending/10 text-status-pending ring-status-pending/25;
+  }
+  .badge-progress {
+    @apply badge bg-status-progress/10 text-status-progress ring-status-progress/25;
+  }
+  .badge-completed {
+    @apply badge bg-status-completed/10 text-status-completed ring-status-completed/25;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-content-muted/25 bg-surface-raised px-3 py-2 text-sm
+      text-content transition-shadow placeholder:text-content-muted/60 focus:border-brand
+      focus:outline-none focus:ring-2 focus:ring-brand/30;
+  }
+  .input-error {
+    @apply border-danger focus:border-danger focus:ring-danger/30;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-content;
+  }
+  .field-error {
+    @apply mt-1.5 text-xs font-medium text-danger;
+  }
+}
+
+@layer utilities {
+  /* Screen-reader-only helper (skip link, live regions) */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    @apply sr-only;
+  }
+}
