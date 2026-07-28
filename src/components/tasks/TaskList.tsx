@@ -33,7 +33,9 @@ export function TaskList({
   }
 
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Tasks">
+    <>
+      <h2 className="sr-only">Task list</h2>
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Tasks">
       <AnimatePresence mode="popLayout" initial={false}>
         {tasks.map((task) => (
           <motion.li
@@ -47,7 +49,8 @@ export function TaskList({
             <TaskCard task={task} onEdit={onEdit} onDelete={onDelete} />
           </motion.li>
         ))}
-      </AnimatePresence>
-    </ul>
+        </AnimatePresence>
+      </ul>
+    </>
   );
 }

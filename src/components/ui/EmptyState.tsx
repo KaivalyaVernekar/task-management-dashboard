@@ -14,7 +14,7 @@ export function EmptyState({ title, description, icon, action }: EmptyStateProps
       <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-brand/10 text-brand">
         {icon ?? <ClipboardList className="h-7 w-7" aria-hidden />}
       </div>
-      <h3 className="text-base font-semibold">{title}</h3>
+      <p className="text-base font-semibold">{title}</p>
       <p className="mt-1 max-w-sm text-sm text-content-muted">{description}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>
