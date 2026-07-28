@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Navbar } from './Navbar';
 
 export function Layout() {
@@ -15,18 +15,17 @@ export function Layout() {
       </a>
       <Navbar />
       <main id="main" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-        {/* Subtle page transition on route change */}
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.div
-            key={pathname}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        {/* Entrance-only page transition. Exit animations with <Outlet/> re-resolve
+            to the new route inside the exiting clone (page duplication bug), so the
+            new page simply fades/slides in on route change. */}
+        <motion.div
+          key={pathname}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
+        >
+          <Outlet />
+        </motion.div>
       </main>
     </div>
   );
