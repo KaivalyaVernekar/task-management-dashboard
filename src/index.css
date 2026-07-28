@@ -7,6 +7,8 @@
    RGB triplets so Tailwind opacity modifiers keep working (bg-surface/80).
 --------------------------------------------------------------------------- */
 :root {
+  /* Native form controls (date-picker icon & popup, scrollbars) follow the theme */
+  color-scheme: light;
   --color-surface: 248 250 252; /* slate-50 */
   --color-surface-raised: 255 255 255; /* white cards */
   --color-surface-sunken: 241 245 249; /* slate-100 wells */
@@ -23,6 +25,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --color-surface: 2 6 23; /* slate-950 */
   --color-surface-raised: 15 23 42; /* slate-900 cards */
   --color-surface-sunken: 30 41 59; /* slate-800 wells */
