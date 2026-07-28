@@ -1,5 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react';
-import { Flag } from 'lucide-react';
+import { CalendarDays, Flag } from 'lucide-react';
 import type { Task, TaskPriority, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { Button } from '@/components/ui/Button';
@@ -133,20 +133,38 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
               *
             </span>
           </label>
-          <input
-            ref={dueDateRef}
-            id="task-due-date"
-            type="date"
-            value={dueDate}
-            onChange={(e) => {
-              setDueDate(e.target.value);
-              clearError('dueDate');
-            }}
-            className={cn('input', errors.dueDate && 'input-error')}
-            aria-required="true"
-            aria-invalid={Boolean(errors.dueDate)}
-            aria-describedby={errors.dueDate ? 'task-due-date-error' : undefined}
-          />
+          <div className="relative">
+            <input
+              ref={dueDateRef}
+              id="task-due-date"
+              type="date"
+              value={dueDate}
+              onChange={(e) => {
+                setDueDate(e.target.value);
+                clearError('dueDate');
+              }}
+              className={cn('input pr-10', errors.dueDate && 'input-error')}
+              aria-required="true"
+              aria-invalid={Boolean(errors.dueDate)}
+              aria-describedby={errors.dueDate ? 'task-due-date-error' : undefined}
+            />
+            <button
+              type="button"
+              aria-label="Open calendar"
+              onClick={() => {
+                const input = dueDateRef.current;
+                if (!input) return;
+                try {
+                  input.showPicker();
+                } catch {
+                  input.focus(); // showPicker unsupported — focus still opens it via keyboard
+                }
+              }}
+              className="icon-btn absolute right-1.5 top-1/2 h-7 w-7 -translate-y-1/2"
+            >
+              <CalendarDays className="h-4 w-4" aria-hidden />
+            </button>
+          </div>
           {errors.dueDate && (
             <p id="task-due-date-error" className="field-error">
               {errors.dueDate}

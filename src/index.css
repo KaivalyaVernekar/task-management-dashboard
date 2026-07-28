@@ -59,9 +59,12 @@
   select option {
     cursor: pointer; /* honored by browsers that style native options */
   }
-  /* The native date-picker indicator is a CTA too (WebKit browsers). */
+  /* Hide the native date-picker indicator — OS chrome, not themeable.
+     A custom button opens the picker via input.showPicker(). */
   input[type='date']::-webkit-calendar-picker-indicator {
-    cursor: pointer;
+    display: none;
+    -webkit-appearance: none;
+    appearance: none;
   }
   /* Hide the native search ✕ — it follows OS chrome and can't be themed.
      We render our own clear button (works in Firefox too, which has none). */
