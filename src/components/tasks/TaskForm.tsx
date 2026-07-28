@@ -162,7 +162,7 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
             id="task-status"
             value={status}
             onChange={(e) => setStatus(e.target.value as TaskStatus)}
-            className="input"
+            className="input select-chevron pr-8"
           >
             {TASK_STATUSES.map((value) => (
               <option key={value} value={value}>

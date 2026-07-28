@@ -18,6 +18,8 @@
   --color-progress: 37 99 235; /* blue-600 */
   --color-completed: 5 150 105; /* emerald-600 */
   --color-danger: 220 38 38; /* red-600 */
+  /* Custom select chevron (slate-500), themed per mode below */
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2364748b' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
 }
 
 .dark {
@@ -32,6 +34,8 @@
   --color-progress: 96 165 250; /* blue-400 */
   --color-completed: 52 211 153; /* emerald-400 */
   --color-danger: 248 113 113; /* red-400 */
+  /* slate-400 chevron for dark surfaces */
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2394a3b8' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
 }
 
 @layer base {
@@ -51,6 +55,10 @@
   }
   select option {
     cursor: pointer; /* honored by browsers that style native options */
+  }
+  /* The native date-picker indicator is a CTA too (WebKit browsers). */
+  input[type='date']::-webkit-calendar-picker-indicator {
+    cursor: pointer;
   }
 }
 
@@ -109,6 +117,14 @@
     @apply w-full rounded-lg border border-content-muted/25 bg-surface-raised px-3 py-2 text-sm
       text-content transition-shadow placeholder:text-content-muted/60 focus:border-brand
       focus:outline-none focus:ring-2 focus:ring-brand/30;
+  }
+  /* Replaces the native select arrow (which hugs the border) with a themed
+     chevron and breathing room. Pair with right padding, e.g. pr-8. */
+  .select-chevron {
+    @apply appearance-none bg-no-repeat;
+    background-image: var(--select-chevron);
+    background-position: right 0.5rem center;
+    background-size: 1.1em;
   }
   .input-error {
     @apply border-danger focus:border-danger focus:ring-danger/30;

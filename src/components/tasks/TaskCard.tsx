@@ -100,7 +100,7 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
                 payload: { id: task.id, status: e.target.value as TaskStatus },
               })
             }
-            className="rounded-md border-0 bg-surface-sunken px-2 py-1 text-xs font-medium text-content focus:outline-none focus:ring-2 focus:ring-brand/50"
+            className="select-chevron rounded-md border-0 bg-surface-sunken py-1 pl-2 pr-7 text-xs font-medium text-content focus:outline-none focus:ring-2 focus:ring-brand/50"
           >
             {TASK_STATUSES.map((status) => (
               <option key={status} value={status}>

@@ -95,7 +95,7 @@ export function FilterBar({ counts, showFilters = true }: FilterBarProps) {
               id="sort-mode"
               value={sortMode}
               onChange={(e) => dispatch({ type: 'SET_SORT', payload: e.target.value as SortMode })}
-              className="input w-auto"
+              className="input select-chevron w-auto pr-8"
             >
               {SORT_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>
