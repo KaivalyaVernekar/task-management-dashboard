@@ -5,6 +5,7 @@ import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { StatusBadge } from '@/components/ui/Badge';
 import { IconButton } from '@/components/ui/IconButton';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
+import { Select } from '@/components/ui/Select';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { formatFullDate, isOverdue, taskDateLabel } from '@/utils/date';
 import { useTaskDispatch } from '@/hooks/useTasks';
@@ -89,8 +90,9 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
           <label className="sr-only" htmlFor={`status-${task.id}`}>
             Change status of {task.title}
           </label>
-          <select
+          <Select
             id={`status-${task.id}`}
+            size="sm"
             value={task.status}
             onChange={(e) =>
               dispatch({
@@ -98,14 +100,13 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
                 payload: { id: task.id, status: e.target.value as TaskStatus },
               })
             }
-            className="select-chevron rounded-md border-0 bg-surface-sunken py-1 pl-2 pr-7 text-xs font-medium text-content focus:outline-none focus:ring-2 focus:ring-brand/50"
           >
             {TASK_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {STATUS_LABELS[status]}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
     </article>

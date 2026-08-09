@@ -4,6 +4,7 @@ import type { Task, TaskPriority, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
+import { Select } from '@/components/ui/Select';
 import { DESCRIPTION_MAX, hasErrors, validateTask, type TaskFormErrors } from '@/utils/validation';
 import { todayISO } from '@/utils/date';
 import { cn } from '@/utils/cn';
@@ -176,18 +177,17 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
           <label htmlFor="task-status" className="label">
             Status
           </label>
-          <select
+          <Select
             id="task-status"
             value={status}
             onChange={(e) => setStatus(e.target.value as TaskStatus)}
-            className="input select-chevron pr-8"
           >
             {TASK_STATUSES.map((value) => (
               <option key={value} value={value}>
                 {STATUS_LABELS[value]}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
 

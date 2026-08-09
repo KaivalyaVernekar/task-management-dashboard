@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowDownNarrowWide, ArrowUpNarrowWide, Flag, Search, X } from 'lucide-react';
-import { IconButton } from '@/components/ui/IconButton';
+import { ArrowDownNarrowWide, ArrowUpNarrowWide, Flag } from 'lucide-react';
+import { SearchInput } from '@/components/ui/SearchInput';
+import { Select } from '@/components/ui/Select';
 import type { SortMode, StatusFilter } from '@/types/task';
 import type { StatusCounts } from '@/hooks/useFilteredTasks';
 import { useTaskDispatch, useTaskState } from '@/hooks/useTasks';
@@ -72,47 +73,31 @@ export function FilterBar({ counts, showFilters = true }: FilterBarProps) {
       )}
 
       <div className="flex items-center gap-2">
-        <div className="relative flex-1 lg:w-56 lg:flex-none">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted"
-            aria-hidden
-          />
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => dispatch({ type: 'SET_SEARCH', payload: e.target.value })}
-            placeholder="Search tasks…"
-            aria-label="Search tasks"
-            className="input pl-9 pr-9"
-          />
-          {searchQuery && (
-            <IconButton
-              label="Clear search"
-              className="absolute right-1.5 top-1/2 h-6 w-6 -translate-y-1/2"
-              onClick={() => dispatch({ type: 'SET_SEARCH', payload: '' })}
-            >
-              <X className="h-3.5 w-3.5" aria-hidden />
-            </IconButton>
-          )}
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onValueChange={(value) => dispatch({ type: 'SET_SEARCH', payload: value })}
+          placeholder="Search tasks…"
+          aria-label="Search tasks"
+          className="flex-1 lg:w-56 lg:flex-none"
+        />
 
         {showFilters && (
           <>
             <label htmlFor="sort-mode" className="sr-only">
               Sort tasks
             </label>
-            <select
+            <Select
               id="sort-mode"
               value={sortMode}
               onChange={(e) => dispatch({ type: 'SET_SORT', payload: e.target.value as SortMode })}
-              className="input select-chevron w-auto pr-8"
+              className="w-auto"
             >
               {SORT_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>
                   {label}
                 </option>
               ))}
-            </select>
+            </Select>
           </>
         )}
       </div>
