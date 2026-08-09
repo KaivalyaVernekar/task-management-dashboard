@@ -1,6 +1,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Plus } from 'lucide-react';
+import { IconButton } from '@/components/ui/IconButton';
 import type { Task, TaskStatus } from '@/types/task';
 import { STATUS_LABELS } from '@/types/task';
 import { SortableTaskCard } from './SortableTaskCard';
@@ -39,13 +40,13 @@ export function BoardColumn({ status, tasks, onEdit, onDelete, onAdd }: BoardCol
         <span className="rounded-full bg-content/5 px-2 py-0.5 text-xs font-medium tabular-nums text-content-muted">
           {tasks.length}
         </span>
-        <button
-          className="icon-btn ml-auto h-7 w-7"
+        <IconButton
+          label={`Add task to ${STATUS_LABELS[status]}`}
+          className="ml-auto h-7 w-7"
           onClick={() => onAdd(status)}
-          aria-label={`Add task to ${STATUS_LABELS[status]}`}
         >
           <Plus className="h-4 w-4" aria-hidden />
-        </button>
+        </IconButton>
       </header>
 
       <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>

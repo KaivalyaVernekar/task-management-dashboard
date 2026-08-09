@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
+import { IconButton } from './IconButton';
 
 interface ModalProps {
   open: boolean;
@@ -91,9 +92,9 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
               <h2 id={titleId} className="text-lg font-semibold">
                 {title}
               </h2>
-              <button className="icon-btn" onClick={onClose} aria-label="Close dialog">
+              <IconButton label="Close dialog" onClick={onClose}>
                 <X className="h-4 w-4" aria-hidden />
-              </button>
+              </IconButton>
             </div>
             {children}
           </motion.div>

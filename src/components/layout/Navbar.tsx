@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCheck, Moon, Sun, Trash2 } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
+import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/utils/cn';
 
 const links = [
@@ -48,17 +49,16 @@ export function Navbar() {
           ))}
         </nav>
 
-        <button
-          className="icon-btn"
+        <IconButton
+          label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
         >
           {theme === 'dark' ? (
             <Sun className="h-4 w-4" aria-hidden />
           ) : (
             <Moon className="h-4 w-4" aria-hidden />
           )}
-        </button>
+        </IconButton>
       </div>
     </header>
   );

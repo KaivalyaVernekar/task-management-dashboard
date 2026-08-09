@@ -3,6 +3,7 @@ import { CalendarCheck, CalendarDays, Pencil, Trash2 } from 'lucide-react';
 import type { Task, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { StatusBadge } from '@/components/ui/Badge';
+import { IconButton } from '@/components/ui/IconButton';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { formatFullDate, isOverdue, taskDateLabel } from '@/utils/date';
@@ -37,22 +38,18 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
         <StatusBadge status={task.status} />
         <div className="flex items-center gap-0.5 opacity-100 transition-opacity sm:opacity-0 sm:group-focus-within:opacity-100 sm:group-hover:opacity-100">
           <Tooltip content="Edit task">
-            <button
-              className="icon-btn"
-              onClick={() => onEdit(task)}
-              aria-label={`Edit ${task.title}`}
-            >
+            <IconButton label={`Edit ${task.title}`} onClick={() => onEdit(task)}>
               <Pencil className="h-4 w-4" aria-hidden />
-            </button>
+            </IconButton>
           </Tooltip>
           <Tooltip content="Delete task">
-            <button
-              className="icon-btn hover:text-danger"
+            <IconButton
+              label={`Delete ${task.title}`}
+              className="hover:text-danger"
               onClick={() => onDelete(task)}
-              aria-label={`Delete ${task.title}`}
             >
               <Trash2 className="h-4 w-4" aria-hidden />
-            </button>
+            </IconButton>
           </Tooltip>
         </div>
       </div>

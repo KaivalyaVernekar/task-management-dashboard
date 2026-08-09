@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowDownNarrowWide, ArrowUpNarrowWide, Flag, Search, X } from 'lucide-react';
+import { IconButton } from '@/components/ui/IconButton';
 import type { SortMode, StatusFilter } from '@/types/task';
 import type { StatusCounts } from '@/hooks/useFilteredTasks';
 import { useTaskDispatch, useTaskState } from '@/hooks/useTasks';
@@ -85,14 +86,13 @@ export function FilterBar({ counts, showFilters = true }: FilterBarProps) {
             className="input pl-9 pr-9"
           />
           {searchQuery && (
-            <button
-              type="button"
+            <IconButton
+              label="Clear search"
+              className="absolute right-1.5 top-1/2 h-6 w-6 -translate-y-1/2"
               onClick={() => dispatch({ type: 'SET_SEARCH', payload: '' })}
-              aria-label="Clear search"
-              className="icon-btn absolute right-1.5 top-1/2 h-6 w-6 -translate-y-1/2"
             >
               <X className="h-3.5 w-3.5" aria-hidden />
-            </button>
+            </IconButton>
           )}
         </div>
 

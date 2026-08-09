@@ -3,6 +3,7 @@ import { CalendarDays, Flag } from 'lucide-react';
 import type { Task, TaskPriority, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
 import { DESCRIPTION_MAX, hasErrors, validateTask, type TaskFormErrors } from '@/utils/validation';
 import { todayISO } from '@/utils/date';
 import { cn } from '@/utils/cn';
@@ -148,9 +149,9 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
               aria-invalid={Boolean(errors.dueDate)}
               aria-describedby={errors.dueDate ? 'task-due-date-error' : undefined}
             />
-            <button
-              type="button"
-              aria-label="Open calendar"
+            <IconButton
+              label="Open calendar"
+              className="absolute right-1.5 top-1/2 h-7 w-7 -translate-y-1/2"
               onClick={() => {
                 const input = dueDateRef.current;
                 if (!input) return;
@@ -160,10 +161,9 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
                   input.focus(); // showPicker unsupported — focus still opens it via keyboard
                 }
               }}
-              className="icon-btn absolute right-1.5 top-1/2 h-7 w-7 -translate-y-1/2"
             >
               <CalendarDays className="h-4 w-4" aria-hidden />
-            </button>
+            </IconButton>
           </div>
           {errors.dueDate && (
             <p id="task-due-date-error" className="field-error">
