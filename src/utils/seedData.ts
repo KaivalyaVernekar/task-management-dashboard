@@ -7,10 +7,15 @@ const isoDate = (offsetDays: number) => iso(offsetDays).slice(0, 10);
 
 let order = 0;
 
-function seed(partial: Omit<Task, 'id' | 'order' | 'deletedAt' | 'createdAt' | 'updatedAt'>): Task {
+function seed(
+  partial: Omit<Task, 'id' | 'order' | 'completedAt' | 'deletedAt' | 'createdAt' | 'updatedAt'> & {
+    completedAt?: string;
+  }
+): Task {
   return {
     id: crypto.randomUUID(),
     order: order++,
+    completedAt: null,
     deletedAt: null,
     createdAt: iso(-3),
     updatedAt: iso(-1),
@@ -63,6 +68,7 @@ export function createSeedTasks(): Task[] {
       status: 'completed',
       priority: 'medium',
       dueDate: isoDate(-2),
+      completedAt: iso(-2),
     }),
     seed({
       title: 'Set up CI pipeline',
@@ -70,6 +76,7 @@ export function createSeedTasks(): Task[] {
       status: 'completed',
       priority: 'high',
       dueDate: isoDate(-4),
+      completedAt: iso(-3),
     }),
   ];
 }

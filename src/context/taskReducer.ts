@@ -26,6 +26,17 @@ function touch(task: Task): Task {
   return { ...task, updatedAt: now() };
 }
 
+/** Status transitions own the completedAt side effect: set on entering
+ *  'completed', cleared on leaving it. */
+function applyStatus(task: Task, status: TaskStatus): Task {
+  if (task.status === status) return task;
+  return {
+    ...task,
+    status,
+    completedAt: status === 'completed' ? now() : null,
+  };
+}
+
 /**
  * Reorders `tasks` so that the task `activeId` sits at `overId`'s position
  * in the global order, then re-normalizes `order` to stable integers.
@@ -43,13 +54,30 @@ function reorder(tasks: Task[], activeId: string, overId: string): Task[] {
 
 export function taskReducer(state: TaskState, action: TaskAction): TaskState {
   switch (action.type) {
-    case 'ADD_TASK':
-      return { ...state, tasks: [...state.tasks, action.payload] };
+    case 'ADD_TASK': {
+      const task = action.payload;
+      const normalized =
+        task.status === 'completed' && !task.completedAt ? { ...task, completedAt: now() } : task;
+      return { ...state, tasks: [...state.tasks, normalized] };
+    }
 
     case 'UPDATE_TASK':
       return {
         ...state,
-        tasks: state.tasks.map((t) => (t.id === action.payload.id ? touch(action.payload) : t)),
+        tasks: state.tasks.map((t) => {
+          if (t.id !== action.payload.id) return t;
+          const next = action.payload;
+          // Reconcile completedAt against the status transition (the form
+          // doesn't manage it): keep it if staying completed, set on entry,
+          // clear on exit.
+          const completedAt =
+            next.status === 'completed'
+              ? t.status === 'completed'
+                ? (t.completedAt ?? now())
+                : now()
+              : null;
+          return touch({ ...next, completedAt });
+        }),
       };
 
     case 'DELETE_TASK':
@@ -78,7 +106,7 @@ export function taskReducer(state: TaskState, action: TaskAction): TaskState {
       return {
         ...state,
         tasks: state.tasks.map((t) =>
-          t.id === action.payload.id ? touch({ ...t, status: action.payload.status }) : t
+          t.id === action.payload.id ? touch(applyStatus(t, action.payload.status)) : t
         ),
       };
 
@@ -90,7 +118,7 @@ export function taskReducer(state: TaskState, action: TaskAction): TaskState {
 
     case 'MOVE_TASK': {
       const moved = state.tasks.map((t) =>
-        t.id === action.payload.id ? touch({ ...t, status: action.payload.status }) : t
+        t.id === action.payload.id ? touch(applyStatus(t, action.payload.status)) : t
       );
       return {
         ...state,

@@ -11,6 +11,7 @@ function makeTask(overrides: Partial<Task> = {}): Task {
     priority: 'medium',
     dueDate: '2026-08-01',
     order: 0,
+    completedAt: null,
     deletedAt: null,
     createdAt: '2026-07-01T00:00:00.000Z',
     updatedAt: '2026-07-01T00:00:00.000Z',
@@ -78,6 +79,41 @@ describe('taskReducer', () => {
       payload: { id: 't1', status: 'completed' },
     });
     expect(state.tasks[0]?.status).toBe('completed');
+  });
+
+  it('sets completedAt when a task enters completed', () => {
+    const state = taskReducer(makeState([makeTask()]), {
+      type: 'SET_STATUS',
+      payload: { id: 't1', status: 'completed' },
+    });
+    expect(state.tasks[0]?.completedAt).not.toBeNull();
+  });
+
+  it('clears completedAt when a task leaves completed', () => {
+    const done = makeTask({ status: 'completed', completedAt: '2026-07-26T00:00:00.000Z' });
+    const state = taskReducer(makeState([done]), {
+      type: 'SET_STATUS',
+      payload: { id: 't1', status: 'pending' },
+    });
+    expect(state.tasks[0]?.completedAt).toBeNull();
+  });
+
+  it('MOVE_TASK into the completed column sets completedAt', () => {
+    const state = taskReducer(makeState([makeTask()]), {
+      type: 'MOVE_TASK',
+      payload: { id: 't1', status: 'completed' },
+    });
+    expect(state.tasks[0]?.completedAt).not.toBeNull();
+  });
+
+  it('UPDATE_TASK preserves completedAt while the task stays completed', () => {
+    const stamp = '2026-07-26T00:00:00.000Z';
+    const done = makeTask({ status: 'completed', completedAt: stamp });
+    const state = taskReducer(makeState([done]), {
+      type: 'UPDATE_TASK',
+      payload: { ...done, title: 'Renamed' },
+    });
+    expect(state.tasks[0]?.completedAt).toBe(stamp);
   });
 
   it('reorders tasks and re-normalizes order', () => {

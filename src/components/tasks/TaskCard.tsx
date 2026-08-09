@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { CalendarDays, Pencil, Trash2 } from 'lucide-react';
+import { CalendarCheck, CalendarDays, Pencil, Trash2 } from 'lucide-react';
 import type { Task, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
 import { StatusBadge } from '@/components/ui/Badge';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
 import { Tooltip } from '@/components/ui/Tooltip';
-import { formatDueLabel, formatFullDate, isOverdue } from '@/utils/date';
+import { formatFullDate, isOverdue, taskDateLabel } from '@/utils/date';
 import { useTaskDispatch } from '@/hooks/useTasks';
 import { cn } from '@/utils/cn';
 
@@ -21,7 +21,9 @@ interface TaskCardProps {
  */
 export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
   const dispatch = useTaskDispatch();
-  const overdue = isOverdue(task.dueDate) && task.status !== 'completed';
+  const isCompleted = task.status === 'completed';
+  const overdue = isOverdue(task.dueDate) && !isCompleted;
+  const DateIcon = isCompleted ? CalendarCheck : CalendarDays;
 
   return (
     <article
@@ -59,8 +61,7 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
         <h3
           className={cn(
             'font-semibold leading-snug',
-            task.status === 'completed' &&
-              'text-content-muted line-through decoration-content-muted/50'
+            isCompleted && 'text-content-muted line-through decoration-content-muted/50'
           )}
         >
           {task.title}
@@ -71,7 +72,7 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-content-muted/10 pt-3">
-        <Tooltip content={formatFullDate(task.dueDate)}>
+        <Tooltip content={`Due ${formatFullDate(task.dueDate)}`}>
           <span
             tabIndex={0}
             className={cn(
@@ -79,8 +80,8 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
               overdue ? 'text-danger' : 'text-content-muted'
             )}
           >
-            <CalendarDays className="h-3.5 w-3.5" aria-hidden />
-            {formatDueLabel(task.dueDate)}
+            <DateIcon className="h-3.5 w-3.5" aria-hidden />
+            {taskDateLabel(task)}
             <span className="sr-only">, due {formatFullDate(task.dueDate)}</span>
           </span>
         </Tooltip>

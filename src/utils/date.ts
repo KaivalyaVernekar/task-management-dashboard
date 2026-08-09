@@ -32,6 +32,32 @@ export function formatDueLabel(dueDate: string): string {
   });
 }
 
+/** "Jul 26" (year appended when not the current year). Accepts yyyy-mm-dd or full ISO. */
+export function formatShortDate(iso: string): string {
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(iso) ? parseDueDate(iso) : new Date(iso);
+  return d.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: d.getFullYear() === new Date().getFullYear() ? undefined : 'numeric',
+  });
+}
+
+/**
+ * Card date label: completed tasks are never "overdue" — they show when they
+ * were completed (or their original due date for legacy data without
+ * completedAt). Shared by the task card and the trash list.
+ */
+export function taskDateLabel(task: {
+  status: string;
+  dueDate: string;
+  completedAt: string | null;
+}): string {
+  if (task.status !== 'completed') return formatDueLabel(task.dueDate);
+  return task.completedAt
+    ? `Completed ${formatShortDate(task.completedAt)}`
+    : `Was due ${formatShortDate(task.dueDate)}`;
+}
+
 export function formatFullDate(dueDate: string): string {
   return parseDueDate(dueDate).toLocaleDateString(undefined, {
     weekday: 'short',

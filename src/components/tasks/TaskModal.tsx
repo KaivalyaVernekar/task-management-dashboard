@@ -31,6 +31,7 @@ export function TaskModal({ open, onClose, task, initialStatus }: TaskModalProps
           id: crypto.randomUUID(),
           ...values,
           order: Math.max(0, ...tasks.map((t) => t.order + 1)),
+          completedAt: null, // reducer sets it if created directly as completed
           deletedAt: null,
           createdAt: now,
           updatedAt: now,

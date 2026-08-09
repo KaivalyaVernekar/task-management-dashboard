@@ -15,7 +15,8 @@ export function loadTasks(): Task[] | null {
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return null;
-    return parsed.filter(isTask);
+    // Migration: completedAt was added after launch — default legacy tasks to null.
+    return parsed.filter(isTask).map((t) => ({ ...t, completedAt: t.completedAt ?? null }));
   } catch {
     // Corrupt JSON, private mode, quota — fall back to seed data.
     return null;

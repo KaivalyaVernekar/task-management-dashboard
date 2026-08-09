@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/useToast';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { StatusBadge } from '@/components/ui/Badge';
-import { formatDueLabel } from '@/utils/date';
+import { taskDateLabel } from '@/utils/date';
 
 export default function TrashPage() {
   const trashed = useTrashedTasks();
@@ -63,7 +63,7 @@ export default function TrashPage() {
                   <p className="truncate font-semibold">{task.title}</p>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-content-muted">
                     <StatusBadge status={task.status} />
-                    <span>{formatDueLabel(task.dueDate)}</span>
+                    <span>{taskDateLabel(task)}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">

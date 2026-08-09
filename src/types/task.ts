@@ -20,6 +20,8 @@ export interface Task {
   dueDate: string;
   /** Global manual rank used by board drag & drop. */
   order: number;
+  /** Set when the task enters 'completed', cleared when it leaves. */
+  completedAt: string | null;
   /** Soft delete — non-null means the task is in the trash. */
   deletedAt: string | null;
   createdAt: string;
