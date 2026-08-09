@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useReducer, useRef, type FormEvent } from 'react';
 import { CalendarDays, Flag } from 'lucide-react';
 import type { Task, TaskPriority, TaskStatus } from '@/types/task';
 import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
@@ -28,6 +28,50 @@ interface TaskFormProps {
 
 const PRIORITIES: TaskPriority[] = ['high', 'medium', 'low'];
 
+interface FormState {
+  values: TaskFormSubmitValues;
+  errors: TaskFormErrors;
+}
+
+type FormAction =
+  /** Setting a field and clearing its error are one atomic transition. */
+  | {
+      [K in keyof TaskFormSubmitValues]: {
+        type: 'SET_FIELD';
+        field: K;
+        value: TaskFormSubmitValues[K];
+      };
+    }[keyof TaskFormSubmitValues]
+  | { type: 'SET_ERRORS'; errors: TaskFormErrors };
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  switch (action.type) {
+    case 'SET_FIELD':
+      return {
+        values: { ...state.values, [action.field]: action.value },
+        errors: { ...state.errors, [action.field]: undefined },
+      };
+    case 'SET_ERRORS':
+      return { ...state, errors: action.errors };
+  }
+}
+
+function initForm({
+  task,
+  initialStatus,
+}: Pick<TaskFormProps, 'task' | 'initialStatus'>): FormState {
+  return {
+    values: {
+      title: task?.title ?? '',
+      description: task?.description ?? '',
+      status: task?.status ?? initialStatus ?? 'pending',
+      priority: task?.priority ?? 'medium',
+      dueDate: task?.dueDate ?? todayISO(),
+    },
+    errors: {},
+  };
+}
+
 const priorityStyles: Record<TaskPriority, string> = {
   high: 'data-[selected=true]:bg-danger/10 data-[selected=true]:text-danger data-[selected=true]:ring-danger/30',
   medium:
@@ -37,30 +81,23 @@ const priorityStyles: Record<TaskPriority, string> = {
 
 /** One reusable form for both add and edit — validation on submit, errors clear on change. */
 export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormProps) {
-  const [title, setTitle] = useState(task?.title ?? '');
-  const [description, setDescription] = useState(task?.description ?? '');
-  const [status, setStatus] = useState<TaskStatus>(task?.status ?? initialStatus ?? 'pending');
-  const [priority, setPriority] = useState<TaskPriority>(task?.priority ?? 'medium');
-  const [dueDate, setDueDate] = useState(task?.dueDate ?? todayISO());
-  const [errors, setErrors] = useState<TaskFormErrors>({});
+  const [{ values, errors }, dispatch] = useReducer(formReducer, { task, initialStatus }, initForm);
+  const { title, description, status, priority, dueDate } = values;
   const titleRef = useRef<HTMLInputElement>(null);
   const dueDateRef = useRef<HTMLInputElement>(null);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const nextErrors = validateTask({ title, description, dueDate });
-    setErrors(nextErrors);
+    dispatch({ type: 'SET_ERRORS', errors: nextErrors });
     if (hasErrors(nextErrors)) {
       // Focus the first invalid field instead of silently failing.
       if (nextErrors.title) titleRef.current?.focus();
       else if (nextErrors.dueDate) dueDateRef.current?.focus();
       return;
     }
-    onSubmit({ title: title.trim(), description: description.trim(), status, priority, dueDate });
+    onSubmit({ ...values, title: title.trim(), description: description.trim() });
   }
-
-  const clearError = (field: keyof TaskFormErrors) =>
-    setErrors((current) => ({ ...current, [field]: undefined }));
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -76,10 +113,7 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
           id="task-title"
           type="text"
           value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            clearError('title');
-          }}
+          onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'title', value: e.target.value })}
           placeholder="e.g. Prepare sprint demo"
           className={cn('input', errors.title && 'input-error')}
           aria-required="true"
@@ -110,10 +144,9 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
         <textarea
           id="task-description"
           value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-            clearError('description');
-          }}
+          onChange={(e) =>
+            dispatch({ type: 'SET_FIELD', field: 'description', value: e.target.value })
+          }
           rows={3}
           placeholder="Optional details…"
           className={cn('input resize-none', errors.description && 'input-error')}
@@ -141,10 +174,9 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
               id="task-due-date"
               type="date"
               value={dueDate}
-              onChange={(e) => {
-                setDueDate(e.target.value);
-                clearError('dueDate');
-              }}
+              onChange={(e) =>
+                dispatch({ type: 'SET_FIELD', field: 'dueDate', value: e.target.value })
+              }
               className={cn('input pr-10', errors.dueDate && 'input-error')}
               aria-required="true"
               aria-invalid={Boolean(errors.dueDate)}
@@ -180,7 +212,9 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
           <Select
             id="task-status"
             value={status}
-            onChange={(e) => setStatus(e.target.value as TaskStatus)}
+            onChange={(e) =>
+              dispatch({ type: 'SET_FIELD', field: 'status', value: e.target.value as TaskStatus })
+            }
           >
             {TASK_STATUSES.map((value) => (
               <option key={value} value={value}>
@@ -201,7 +235,7 @@ export function TaskForm({ task, initialStatus, onSubmit, onCancel }: TaskFormPr
               role="radio"
               aria-checked={priority === value}
               data-selected={priority === value}
-              onClick={() => setPriority(value)}
+              onClick={() => dispatch({ type: 'SET_FIELD', field: 'priority', value })}
               className={cn(
                 'flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-content-muted ring-1 ring-inset ring-content-muted/20 transition-colors hover:text-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60',
                 priorityStyles[value]
