@@ -56,3 +56,12 @@ export const PRIORITY_WEIGHT: Record<TaskPriority, number> = {
   medium: 1,
   low: 2,
 };
+
+/**
+ * The "is this task done?" business rule, centralized. Every behavior that
+ * hangs off done-ness (completedAt stamping, overdue suppression,
+ * strikethrough, date labels) asks this predicate instead of comparing
+ * status literals — one audit point if done-like statuses ever grow
+ * (e.g. 'archived', 'cancelled').
+ */
+export const isDoneStatus = (status: TaskStatus): boolean => status === 'completed';

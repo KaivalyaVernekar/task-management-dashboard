@@ -1,3 +1,6 @@
+import { isDoneStatus } from '@/types/task';
+import type { TaskStatus } from '@/types/task';
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Start of today (local time). */
@@ -43,16 +46,16 @@ export function formatShortDate(iso: string): string {
 }
 
 /**
- * Card date label: completed tasks are never "overdue" — they show when they
+ * Card date label: done tasks are never "overdue" — they show when they
  * were completed (or their original due date for legacy data without
  * completedAt). Shared by the task card and the trash list.
  */
 export function taskDateLabel(task: {
-  status: string;
+  status: TaskStatus;
   dueDate: string;
   completedAt: string | null;
 }): string {
-  if (task.status !== 'completed') return formatDueLabel(task.dueDate);
+  if (!isDoneStatus(task.status)) return formatDueLabel(task.dueDate);
   return task.completedAt
     ? `Completed ${formatShortDate(task.completedAt)}`
     : `Was due ${formatShortDate(task.dueDate)}`;

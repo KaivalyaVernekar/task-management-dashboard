@@ -1,3 +1,4 @@
+import { isDoneStatus } from '@/types/task';
 import type { SortMode, Task, TaskState, TaskStatus, ViewMode } from '@/types/task';
 
 export type TaskAction =
@@ -33,7 +34,7 @@ function applyStatus(task: Task, status: TaskStatus): Task {
   return {
     ...task,
     status,
-    completedAt: status === 'completed' ? now() : null,
+    completedAt: isDoneStatus(status) ? now() : null,
   };
 }
 
@@ -57,7 +58,7 @@ export function taskReducer(state: TaskState, action: TaskAction): TaskState {
     case 'ADD_TASK': {
       const task = action.payload;
       const normalized =
-        task.status === 'completed' && !task.completedAt ? { ...task, completedAt: now() } : task;
+        isDoneStatus(task.status) && !task.completedAt ? { ...task, completedAt: now() } : task;
       return { ...state, tasks: [...state.tasks, normalized] };
     }
 
@@ -70,12 +71,11 @@ export function taskReducer(state: TaskState, action: TaskAction): TaskState {
           // Reconcile completedAt against the status transition (the form
           // doesn't manage it): keep it if staying completed, set on entry,
           // clear on exit.
-          const completedAt =
-            next.status === 'completed'
-              ? t.status === 'completed'
-                ? (t.completedAt ?? now())
-                : now()
-              : null;
+          const completedAt = isDoneStatus(next.status)
+            ? isDoneStatus(t.status)
+              ? (t.completedAt ?? now())
+              : now()
+            : null;
           return touch({ ...next, completedAt });
         }),
       };

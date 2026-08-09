@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { CalendarCheck, CalendarDays, Pencil, Trash2 } from 'lucide-react';
 import type { Task, TaskStatus } from '@/types/task';
-import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES } from '@/types/task';
+import { PRIORITY_LABELS, STATUS_LABELS, TASK_STATUSES, isDoneStatus } from '@/types/task';
 import { StatusBadge } from '@/components/ui/Badge';
 import { IconButton } from '@/components/ui/IconButton';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
@@ -23,7 +23,7 @@ interface TaskCardProps {
  */
 export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
   const dispatch = useTaskDispatch();
-  const isCompleted = task.status === 'completed';
+  const isCompleted = isDoneStatus(task.status);
   const overdue = isOverdue(task.dueDate) && !isCompleted;
   const DateIcon = isCompleted ? CalendarCheck : CalendarDays;
 
