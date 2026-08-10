@@ -7,7 +7,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { PriorityFlag } from '@/components/ui/PriorityFlag';
 import { Select } from '@/components/ui/Select';
 import { Tooltip } from '@/components/ui/Tooltip';
-import { formatFullDate, isOverdue, taskDateLabel } from '@/utils/date';
+import { isOverdue, taskDateLabel, taskDateTooltip } from '@/utils/date';
 import { useTaskDispatch } from '@/hooks/useTasks';
 import { cn } from '@/utils/cn';
 
@@ -70,7 +70,7 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-content-muted/10 pt-3">
-        <Tooltip content={`Due ${formatFullDate(task.dueDate)}`}>
+        <Tooltip content={taskDateTooltip(task)}>
           <span
             tabIndex={0}
             className={cn(
@@ -80,7 +80,7 @@ export const TaskCard = memo(function TaskCard({ task, onEdit, onDelete }: TaskC
           >
             <DateIcon className="h-3.5 w-3.5" aria-hidden />
             {taskDateLabel(task)}
-            <span className="sr-only">, due {formatFullDate(task.dueDate)}</span>
+            <span className="sr-only">, {taskDateTooltip(task)}</span>
           </span>
         </Tooltip>
         <div className="flex items-center gap-3">

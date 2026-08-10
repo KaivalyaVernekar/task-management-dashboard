@@ -61,6 +61,23 @@ export function taskDateLabel(task: {
     : `Was due ${formatShortDate(task.dueDate)}`;
 }
 
+/** Tooltip/SR companion to taskDateLabel — full-date wording that matches it. */
+export function taskDateTooltip(task: {
+  status: TaskStatus;
+  dueDate: string;
+  completedAt: string | null;
+}): string {
+  if (!isDoneStatus(task.status)) return `Due ${formatFullDate(task.dueDate)}`;
+  if (!task.completedAt) return `Was due ${formatFullDate(task.dueDate)}`;
+  const completed = new Date(task.completedAt).toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  return `Completed ${completed}`;
+}
+
 export function formatFullDate(dueDate: string): string {
   return parseDueDate(dueDate).toLocaleDateString(undefined, {
     weekday: 'short',
